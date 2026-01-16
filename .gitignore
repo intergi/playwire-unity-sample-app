@@ -1,0 +1,46 @@
+# ---------------------------------
+# Unity Project Folders
+# ---------------------------------
+# Standard Unity folders to ignore.
+# Using **/ ensures they are caught even if your Unity project is in a subfolder.
+**/[Ll]ibrary/
+**/[Tt]emp/
+**/[Oo]bj/
+**/[Ll]ogs/
+**/[Uu]ser[Ss]ettings/
+**/[Mm]emoryCaptures/
+**/[Rr]ecordings/
+**/[Bb]uild/
+
+# ---------------------------------
+# Generated IDE Files
+# ---------------------------------
+# Never commit these. Unity/Visual Studio regenerates them.
+*.csproj
+*.unityproj
+*.sln
+*.slnx
+*.suo
+*.tmp
+*.user
+*.userprefs
+*.pidb
+*.booproj
+*.svd
+*.pdb
+*.opendb
+*.VC.db
+.vscode
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+*.measuredangle
+
+# ---------------------------------
+# OS & Misc Junk
+# ---------------------------------
+.DS_Store
+.AppleDouble
+.LSOverride
+Thumbs.db
+ehthumbs.db
