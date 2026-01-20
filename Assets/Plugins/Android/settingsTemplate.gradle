@@ -1,0 +1,40 @@
+pluginManagement {
+    repositories {
+        **ARTIFACTORYREPOSITORY**
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+}
+
+dependencyResolutionManagement {
+    repositoriesMode.set(RepositoriesMode.PREFER_SETTINGS)
+    repositories {
+        **ARTIFACTORYREPOSITORY**
+        google()
+        mavenCentral()
+
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/intergi/playwire-android-binaries")
+            credentials {
+                username = 'USERNAME'
+                password = 'PASSWORD'
+            }
+        }
+        maven { url 'https://android-sdk.is.com/' }
+        maven { url 'https://artifact.bytedance.com/repository/pangle/' }
+        maven { url 'https://cboost.jfrog.io/artifactory/chartboost-ads/' }
+        maven { url 'https://dl-maven-android.mintegral.com/repository/mbridge_android_sdk_oversea' }
+        maven { url 'https://repo.pubmatic.com/artifactory/public-repos/' }
+        maven { url 'https://maven.ogury.co' }
+        maven { url 'https://s3.amazonaws.com/smaato-sdk-releases/' }
+        maven { url 'https://verve.jfrog.io/artifactory/verve-gradle-release' }
+        
+        flatDir {
+            dirs "${rootDir}/unityLibrary/libs"
+        }
+    }
+}
+
+include ':launcher', ':unityLibrary'

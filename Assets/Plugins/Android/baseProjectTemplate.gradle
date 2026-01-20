@@ -1,0 +1,19 @@
+buildscript {
+    repositories {
+        **ARTIFACTORYREPOSITORY**
+        google()
+        mavenCentral()
+    }
+    dependencies {
+        // Unity 6 typically uses 8.1.1 or 8.1.4
+        classpath 'com.android.tools.build:gradle:8.1.4'
+        **BUILD_SCRIPT_DEPS**
+    }
+}
+
+// We do NOT need an 'allprojects' block here anymore because
+// settingsTemplate.gradle handles it for every module.
+
+task clean(type: Delete) {
+    delete rootProject.buildDir
+}
