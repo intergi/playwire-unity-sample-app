@@ -1,34 +1,9 @@
-# ---------------------------------
-# 1. Unity & Native Binaries (LFS)
-# iOS Static Libraries (CRITICAL: libiPhone-lib.a is ~500MB+)
-*.a filter=lfs diff=lfs merge=lfs -text
-
-# Android Native Libraries (CRITICAL: libunity.so is ~50MB+)
-*.so filter=lfs diff=lfs merge=lfs -text
-# Unity Managed Assemblies & Plugins
-*.dll filter=lfs diff=lfs merge=lfs -text
-*.aar filter=lfs diff=lfs merge=lfs -text
-*.jar filter=lfs diff=lfs merge=lfs -text
-# Archives (If packages include zipped assets)
-*.zip filter=lfs diff=lfs merge=lfs -text
-*.7z filter=lfs diff=lfs merge=lfs -text
-*.tar filter=lfs diff=lfs merge=lfs -text
-*.gz filter=lfs diff=lfs merge=lfs -text
-# 2. Art & Media (Optional but Recommended)
-# If you have large textures/models in your source, LFS them too.
-*.psd filter=lfs diff=lfs merge=lfs -text
-*.exr filter=lfs diff=lfs merge=lfs -text
-*.tga filter=lfs diff=lfs merge=lfs -text
-*.pdf filter=lfs diff=lfs merge=lfs -text
-*.mp3 filter=lfs diff=lfs merge=lfs -text
-*.wav filter=lfs diff=lfs merge=lfs -text
-*.mp4 filter=lfs diff=lfs merge=lfs -text
-*.mov filter=lfs diff=lfs merge=lfs -text
-# 3. Text Serialization (Merge Settings)
-# Ensure Unity text assets are treated as text for merging
 *.cs diff=csharp text
 *.cginc text
 *.shader text
 *.xml text
 *.json text
-* !text !filter !merge !diff
+*.unity text
+*.prefab text
+*.mat text
+*.meta text

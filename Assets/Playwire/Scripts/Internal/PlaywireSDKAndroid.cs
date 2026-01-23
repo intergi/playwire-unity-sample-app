@@ -60,7 +60,7 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
                 string typeString = PluginClass.CallStatic<string>("getCMP");
     			PlaywireSDKBase.CMP type = (PlaywireSDKBase.CMP)Enum.Parse(typeof(PlaywireSDKBase.CMP), typeString, true);
                 return type;
-		    } catch (Exception e) {
+		    } catch (Exception) {
                 return PlaywireSDKBase.CMP.GoogleUMP;
             }
         }
