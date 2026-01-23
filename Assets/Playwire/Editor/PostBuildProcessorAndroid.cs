@@ -12,8 +12,8 @@ using System.Xml.Linq;
 
 internal class PostBuildProcessorAndroid: PostBuildProcessorBase, IPostGenerateGradleAndroidProject
 {
-    private static string androidAppIdentifierKey = "com.google.android.gms.ads.APPLICATION_ID";
-    private static string gamAppId = "YOUR_GAM_APP_ID";
+    // GAD Application ID (update this with your own value)
+    private static string gamAppId = "ca-app-pub-6531503260671471~7633749100";
 
     public int callbackOrder 
     { 
@@ -257,7 +257,7 @@ internal class PostBuildProcessorAndroid: PostBuildProcessorBase, IPostGenerateG
 
             // Replace GAD placeholder from the settings.xml with value from the config file
             string value = metadata.Value;
-            if (metadata.Key == androidAppIdentifierKey)
+            if (metadata.Key == "com.google.android.gms.ads.APPLICATION_ID")
             {
                 value = gamAppId;
             }

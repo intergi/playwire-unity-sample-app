@@ -38,7 +38,7 @@ public class PlaywireSDKiOS : PlaywireSDKBase
                 string typeString = _PlaywireGetCMP();
     			PlaywireSDKBase.CMP type = (PlaywireSDKBase.CMP)Enum.Parse(typeof(PlaywireSDKBase.CMP), typeString, true);
                 return type;
-		    } catch (Exception e) {
+		    } catch (Exception) {
                 return PlaywireSDKBase.CMP.GoogleUMP;
             }
         }

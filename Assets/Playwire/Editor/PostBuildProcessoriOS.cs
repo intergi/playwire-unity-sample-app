@@ -11,8 +11,10 @@ using System.Collections.Generic;
 
 internal class PostBuildProcessoriOS: PostBuildProcessorBase
 {
-    private static string iOSAppIdentifierKey = "GADApplicationIdentifier";
-    private static string gamAppId = "YOUR_GAM_APP_ID";
+    // Info.plist values (update these with your own values)
+    private static string gamAppId = "ca-app-pub-6531503260671471~4637188748";
+    private static bool userTrackingEnabled = true;
+    private static string userTrackingDescription = "This identifier will be used to deliver personalized ads to you.";
 
     [PostProcessBuildAttribute(0)]
     public static void OnPostrocessBuild(BuildTarget target, string pathToBuiltProject) 
@@ -31,8 +33,13 @@ internal class PostBuildProcessoriOS: PostBuildProcessorBase
             var plist = new PlistDocument();
             plist.ReadFromFile(plistPath);
 
-            // Update Info.plist to include GAD identifier
-            SetiOSApplicationIdentifier(plist);
+            // Update Info.plist to include necessary parameters
+            plist.root.SetString("GADApplicationIdentifier", gamAppId);
+            plist.root.SetBoolean("GADIsAdManagerApp", true);
+            if (userTrackingEnabled)
+            {
+                plist.root.SetString("NSUserTrackingUsageDescription", userTrackingDescription);
+            }
 
             // Update Info.plist to include list of required SKAdNetworkIds
             string skAdNetworkIdsPath = Path.Combine(iOSResourcesPath, "skadnetworkids.plist");
@@ -170,18 +177,6 @@ internal class PostBuildProcessoriOS: PostBuildProcessorBase
             if (existingSkAdNetworkIds.Contains(skAdNetworkId)) continue;
             var skAdNetworkItemDict = skAdNetworkItems.AsArray().AddDict();
             skAdNetworkItemDict.SetString("SKAdNetworkIdentifier", skAdNetworkId);
-        }
-    }
-
-    private static void SetiOSApplicationIdentifier(PlistDocument plist)
-    {
-        if(!String.IsNullOrEmpty(gamAppId)) 
-        {
-            plist.root.SetString(iOSAppIdentifierKey, gamAppId);
-        }
-        else
-        {
-            Debug.LogWarning($"[{LogTag}] Couldn't find gamAppId in the PostBuildProcessoriOS.cs.");
         }
     }
 
