@@ -11,16 +11,6 @@ This guide explains how to export and configure the Playwire Unity Sample App in
 4. Click **Export** and choose a destination folder.  
 5. Open the exported folder in **Android Studio**.
 
-### Required Configuration
-
-Before running the app on a device/emulator, you must update `settings.gradle` in the exported Android project. Locate the maven block inside dependencyResolutionManagement. Replace the placeholders 'USERNAME' and 'PASSWORD' with your actual artifact credentials.
-  ```gradle
-  credentials {  
-      username = 'USERNAME'  
-      password = 'PASSWORD'  
-  }
-  ```
-
 ## iOS Export
 
 1. In Unity, go to **File \> Build Profiles**.  

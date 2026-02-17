@@ -18,19 +18,9 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
     public static void InitializeSDK(string publisherId, string appId)
     {
         try {
-            AndroidJavaClass TotalPluginClass = new AndroidJavaClass("com.playwire.unityplugin.PlaywireTotalInitializer");
-            if (TotalPluginClass != null) {
-                TotalPluginClass.CallStatic("initializeSdk", publisherId, appId);
-                return;
-            }
-        } catch(Exception e) {
-            Debug.LogError($"[{LogTag}] Android Plugin Class intialization error: {e.Message}"); 
-        }
-
-        try {
-            AndroidJavaClass CoppaPluginClass = new AndroidJavaClass("com.playwire.unityplugin.PlaywireCOPPAInitializer");
-            if (CoppaPluginClass != null) {
-                CoppaPluginClass.CallStatic("initializeSdk", publisherId, appId);
+            AndroidJavaClass InitializerClass = new AndroidJavaClass("com.playwire.unityplugin.PlaywireInitializer");
+            if (InitializerClass != null) {
+                InitializerClass.CallStatic("initializeSdk", publisherId, appId);
                 return;
             }
         } catch(Exception e) {
