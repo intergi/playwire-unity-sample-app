@@ -58,7 +58,7 @@ public class HomeScreen : MonoBehaviour
         #endif
 
         PlaywireSDK.StartConsoleLogger();
-        PlaywireSDK.Test = true;
+        PlaywireSDK.Test = false;
 
         // Subscribe to Events
         RegisterCallbacks();
