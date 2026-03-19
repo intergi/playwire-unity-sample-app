@@ -57,7 +57,9 @@ public class HomeScreen : MonoBehaviour
         }
         #endif
 
+        // Log SDK events to console.
         PlaywireSDK.StartConsoleLogger();
+        // Set to `true` to test your implementation with GAM test ads on real devices.
         PlaywireSDK.Test = false;
 
         // Subscribe to Events
