@@ -79,6 +79,13 @@
     self.bannerView.hidden = YES;
 }
 
+- (void)destroyBanner
+{
+    if (!self.bannerView) return;
+
+    [self.bannerView destroy];
+}
+
 - (void)refreshBanner
 {
     if (!self.bannerView) return;

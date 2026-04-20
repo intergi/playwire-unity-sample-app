@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)loadBannerAtPosition:(PWAdPosition)position withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
 - (void)showBanner;
 - (void)hideBanner;
+- (void)destroyBanner;
 - (void)refreshBanner;
 
 @end

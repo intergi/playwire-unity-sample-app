@@ -174,6 +174,17 @@ extern "C" {
         [_unityManager hideBanner:adUnitId];
     }
 
+    void _PlaywireDestroyBanner(const char *cAdUnitId)
+    {
+        NSString *adUnitId = NSSTRING(cAdUnitId);
+
+        if (!_isInitialized) {
+            NSLog(@"[%@] _PlaywireHideBanner: SDK is not initialized, banner is not loaded.", LOGTAG);
+            return;
+        } 
+        [_unityManager destroyBanner:adUnitId];
+    }
+
     void _PlaywireRefreshBanner(const char *cAdUnitId)
     {
         NSString *adUnitId = NSSTRING(cAdUnitId);

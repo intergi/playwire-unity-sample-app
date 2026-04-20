@@ -144,6 +144,12 @@ static BOOL isConsoleLoggerEnabled = NO;
     [adUnitManager hideBanner];
 }
 
+- (void)destroyBanner:(NSString *)adUnitId
+{
+    PWBannerAdUnitManager *adUnitManager = [self bannerAdUnitManager:adUnitId];
+    [adUnitManager destroyBanner];
+}
+
 - (void)refreshBanner:(NSString *)adUnitId
 {
     PWBannerAdUnitManager *adUnitManager = [self bannerAdUnitManager:adUnitId];
