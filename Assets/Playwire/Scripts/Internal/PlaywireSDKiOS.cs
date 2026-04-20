@@ -85,7 +85,7 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
     public static void DestroyBanner(string adUnitId)
     {
-        // Must be used only for Android.
+        _PlaywireDestroyBanner(adUnitId);
     }
 
     public static void RefreshBanner(string adUnitId)
@@ -305,6 +305,9 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         [DllImport("__Internal")]
         private static extern void _PlaywireHideBanner(string adUnitId);
+
+        [DllImport("__Internal")]
+        private static extern void _PlaywireDestroyBanner(string adUnitId);
 
         [DllImport("__Internal")]
         private static extern void _PlaywireRefreshBanner(string adUnitId);

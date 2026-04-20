@@ -28,6 +28,7 @@ NS_ASSUME_NONNULL_BEGIN
     withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
 - (void)showBanner:(NSString *)adUnitId;
 - (void)hideBanner:(NSString *)adUnitId;
+- (void)destroyBanner:(NSString *)adUnitId;
 - (void)refreshBanner:(NSString *)adUnitId;
 
 - (void)setInterstitial:(NSString *)adUnitId
