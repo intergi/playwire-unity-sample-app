@@ -5,8 +5,7 @@ buildscript {
         mavenCentral()
     }
     dependencies {
-        // Unity 6 typically uses 8.1.1 or 8.1.4
-        classpath 'com.android.tools.build:gradle:8.1.4'
+        classpath 'com.android.tools.build:gradle:8.6.0'
         **BUILD_SCRIPT_DEPS**
     }
 }

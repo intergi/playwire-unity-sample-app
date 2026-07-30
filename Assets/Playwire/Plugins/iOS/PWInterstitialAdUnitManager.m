@@ -5,8 +5,7 @@
 
 #import "PWInterstitialAdUnitManager.h"
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <PlaywireMobile/PlaywireMobile-Swift.h>
-#import <Playwire-Swift.h>
+#import <Playwire/Playwire-Swift.h>
 #import "PWUnityManager.h"
 #import "PWConstant.h"
 
@@ -86,10 +85,14 @@
   }
 }
 
-- (void)fullScreenAdDidFailToLoad:(PWFullScreenAd * _Nonnull)ad
-{
-  NSString* message = [PWUnityMessageBuilder buildWithName:PW_Interstitial_FailedToLoad_Event
-                                                  adUnitId:self.adUnit];
+- (void)fullScreenAdDidFailToLoad:(PWFullScreenAd * _Nonnull)ad error:(PWAdError * _Nonnull)error {
+    NSDictionary *params = @{
+        @"code": @(error.code).stringValue,
+        @"name": error.name,
+        @"message": error.message
+    };
+
+  NSString* message = [PWUnityMessageBuilder buildWithName:PW_Interstitial_FailedToLoad_Event adUnitId:self.adUnit parameters:params];
   [PWUnityManager sendUnityMessage:message];
 }
 
@@ -111,11 +114,15 @@
   [PWUnityManager sendUnityMessage:message];
 }
 
-- (void)fullScreenAdDidFailToPresentFullScreenContent:(PWFullScreenAd * _Nonnull)ad
-{
+- (void)fullScreenAdDidFailToPresentFullScreenContent:(PWFullScreenAd * _Nonnull)ad error:(PWAdError * _Nonnull)error {
+    NSDictionary *params = @{
+        @"code": @(error.code).stringValue,
+        @"name": error.name,
+        @"message": error.message
+    };
+
   self.isUsed = YES;
-  NSString* message = [PWUnityMessageBuilder buildWithName:PW_Interstitial_FailedToOpen_Event
-                                                  adUnitId:self.adUnit];
+  NSString* message = [PWUnityMessageBuilder buildWithName:PW_Interstitial_FailedToOpen_Event adUnitId:self.adUnit parameters:params];
   [PWUnityManager sendUnityMessage:message];
 }
 

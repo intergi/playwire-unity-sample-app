@@ -5,8 +5,7 @@
 
 #import <Foundation/Foundation.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <PlaywireMobile/PlaywireMobile-Swift.h>
-#import <Playwire-Swift.h>
+#import <Playwire/Playwire-Swift.h>
 #import "PWAdPosition.h"
 #import "PWUnityMessageBuilder.h"
 #import "PWConstant.h"
@@ -20,7 +19,6 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (void)setGlobalTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
 
-- (void)startConsoleLogger;
 - (void)loadBanner:(NSString *)adUnitId
           position:(PWAdPosition)position
      withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
@@ -57,11 +55,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setCMP:(PWCMPType)type;
 - (PWCMPType)getCMP;
 
-- (void)setRewardedInterstitial:(NSString *)adUnitId
-                  withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
-- (void)loadRewardedInterstitial:(NSString *)adUnitId withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
-- (BOOL)isRewardedInterstitialReady:(NSString *)adUnitId;
-- (void)showRewardedInterstitial:(NSString *)adUnitId;
+- (void)setLogLevel:(LogLevel)level;
 
 + (UIViewController*)unityViewController;
 + (void)sendUnityMessage:(NSString *)message;

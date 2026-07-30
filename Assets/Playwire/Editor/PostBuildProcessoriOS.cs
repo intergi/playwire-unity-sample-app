@@ -51,13 +51,8 @@ internal class PostBuildProcessoriOS: PostBuildProcessorBase
             var unityFrameworkTargetGuid = project.GetUnityFrameworkTargetGuid();
             var unityMainTargetGuid = project.GetUnityMainTargetGuid();
 
-            AddSwiftSupport(pathToBuiltProject, project, unityFrameworkTargetGuid, unityMainTargetGuid);
-
             // Update Paths of the whole Xcode project
-            project.SetBuildProperty(unityMainTargetGuid, "ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES", "YES");
-            project.AddBuildProperty(unityMainTargetGuid, "LIBRARY_SEARCH_PATHS", "$(SDKROOT)/usr/lib/swift");
             project.AddBuildProperty(unityMainTargetGuid, "OTHER_LDFLAGS", "-ObjC");
-            project.AddBuildProperty(unityMainTargetGuid, "SWIFT_INCLUDE_PATHS", "$(PODS_ROOT)/Playwire/** $(PODS_XCFRAMEWORKS_BUILD_DIR)/**");
             project.AddBuildProperty(unityFrameworkTargetGuid, "EXCLUDED_SOURCE_FILE_NAMES", "$(SRCROOT)/Libraries/Playwire/Plugins/iOS/Tests/*");
 
             // Save all changes
@@ -66,52 +61,6 @@ internal class PostBuildProcessoriOS: PostBuildProcessorBase
     }
 
     #region iOS
-
-    private static void AddSwiftSupport(string path, PBXProject project, string unityFrameworkTargetGuid, string unityMainTargetGuid)
-    {
-        var swiftSupportFilePath = "Classes/PlaywireSwiftSupport.swift";
-        var swiftSupportTotalFilePath = Path.Combine(path, swiftSupportFilePath);
-        if (File.Exists(swiftSupportTotalFilePath))
-        {
-            var fileToDeleteGuid = project.FindFileGuidByRealPath(swiftSupportTotalFilePath, PBXSourceTree.Source);
-            if (!string.IsNullOrEmpty(fileToDeleteGuid))
-            {
-                project.RemoveFile(fileToDeleteGuid);
-                project.RemoveFileFromBuild(unityFrameworkTargetGuid, fileToDeleteGuid);
-                project.RemoveFileFromBuild(unityMainTargetGuid, fileToDeleteGuid);
-                FileUtil.DeleteFileOrDirectory(swiftSupportTotalFilePath);
-            }
-        }
-        CreateSwiftFile(swiftSupportTotalFilePath);
-        var fileGuid = project.AddFile(swiftSupportTotalFilePath, swiftSupportFilePath, PBXSourceTree.Source);
-
-        project.AddFileToBuild(unityFrameworkTargetGuid, fileGuid);
-        project.AddBuildProperty(unityFrameworkTargetGuid, "SWIFT_VERSION", "5");
-        project.AddBuildProperty(unityFrameworkTargetGuid, "CLANG_ENABLE_MODULES", "YES");
-
-        project.AddFileToBuild(unityMainTargetGuid, fileGuid);
-        project.AddBuildProperty(unityMainTargetGuid, "SWIFT_VERSION", "5");
-        project.AddBuildProperty(unityMainTargetGuid, "CLANG_ENABLE_MODULES", "YES");
-    }
-
-    private static void CreateSwiftFile(string path)
-    {
-        if (File.Exists(path))
-            return;
-        var swiftFileAssembler = File.CreateText(path);
-
-        using (swiftFileAssembler)
-        {
-            swiftFileAssembler.WriteLine("//");
-            swiftFileAssembler.WriteLine("//  PlaywireSwiftSupport.swift");
-            swiftFileAssembler.WriteLine("//  Playwire");
-            swiftFileAssembler.WriteLine("//");
-            swiftFileAssembler.WriteLine("//  Created by Intergi. All rights reserved.");
-            swiftFileAssembler.WriteLine("//\n");
-            swiftFileAssembler.WriteLine("import Foundation");
-            swiftFileAssembler.Close();
-        }
-    }
 
     private static HashSet<string> ReadSKAdNetworkIds(string path) 
     {

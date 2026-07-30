@@ -15,6 +15,7 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
 
     #region Initialization
 
+    [Obsolete("InitializeSDK is deprecated. Use StartSDK instead.")]
     public static void InitializeSDK(string publisherId, string appId)
     {
         try {
@@ -29,9 +30,21 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
 
         Debug.LogError($"[{LogTag}] Android Plugin Class can't be found."); 
     }
-    public static void StartConsoleLogger()
+
+    public static void StartSDK(string publisherId, string appId)
     {
-        PluginClass.CallStatic("startConsoleLogger");
+        try {
+            AndroidJavaClass InitializerClass = new AndroidJavaClass("com.playwire.unityplugin.PlaywireInitializer");
+            if (InitializerClass != null) {
+                InitializerClass.CallStatic("startSdk", publisherId, appId);
+                return;
+            }
+        } catch(Exception e) {
+            Debug.LogError($"[{LogTag}] Android Plugin Class start error: {e.Message}");
+            return;
+        }
+
+        Debug.LogError($"[{LogTag}] Android Plugin Class can't be found.");
     }
 
     public static bool Test { 
@@ -57,6 +70,11 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
         set {
             PluginClass.CallStatic("setCMP", value.ToString());
         }
+    }
+
+    public static void SetLogLevel(PlaywireSDKBase.LogLevel level)
+    {
+        PluginClass.CallStatic("setLogLevel", (int)level);
     }
 
     #endregion Initialization
@@ -194,29 +212,4 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
 
     #endregion AppOpenAd
 
-    #region Rewarded Interstitial
-
-    public static void SetRewardedInterstitialTargeting(string adUnitId, PlaywireSDKTargeting targeting) 
-    {
-        string targets = targeting != null ? targeting.ToString() : null;
-        PluginClass.CallStatic("setRewardedInterstitialTargeting", adUnitId, targets);
-    }
-
-    public static void LoadRewardedInterstitial(string adUnitId, PlaywireSDKTargeting targeting = null)
-    {
-        string loadTargets = targeting != null ? targeting.ToString() : null;
-        PluginClass.CallStatic("loadRewardedInterstitial", adUnitId, loadTargets);
-    }
-
-    public static bool IsRewardedInterstitialReady(string adUnitId)
-    {
-        return PluginClass.CallStatic<bool>("isRewardedInterstitialReady", adUnitId);
-    }
-
-    public static void ShowRewardedInterstitial(string adUnitId)
-    {
-        PluginClass.CallStatic("showRewardedInterstitial", adUnitId);
-    }
-
-    #endregion Rewarded Interstitial
 }

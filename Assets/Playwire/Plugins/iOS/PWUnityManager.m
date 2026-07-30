@@ -8,9 +8,6 @@
 #import "PWInterstitialAdUnitManager.h"
 #import "PWRewardedAdUnitManager.h"
 #import "PWAppOpenAdUnitManager.h"
-#import "PWRewardedInterstitialAdUnitManager.h"
-
-static BOOL isConsoleLoggerEnabled = NO;
 
 @interface PWUnityManager()
 
@@ -18,7 +15,6 @@ static BOOL isConsoleLoggerEnabled = NO;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, PWInterstitialAdUnitManager *> *interstitialsAdUnitManagers;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, PWRewardedAdUnitManager *> *rewardedAdUnitManagers;
 @property (nonatomic, strong) NSMutableDictionary<NSString *, PWAppOpenAdUnitManager *> *appOpenAdUnitManagers;
-@property (nonatomic, strong) NSMutableDictionary<NSString *, PWRewardedInterstitialAdUnitManager *> *rewardedIterstitialAdUnitManagers;
 
 @end
 
@@ -43,7 +39,6 @@ static BOOL isConsoleLoggerEnabled = NO;
         self.interstitialsAdUnitManagers = [[NSMutableDictionary alloc] init];
         self.rewardedAdUnitManagers = [[NSMutableDictionary alloc] init];
         self.appOpenAdUnitManagers = [[NSMutableDictionary alloc] init];
-        self.rewardedIterstitialAdUnitManagers = [[NSMutableDictionary alloc] init];
     }
     return self;
 }
@@ -93,28 +88,10 @@ static BOOL isConsoleLoggerEnabled = NO;
   return manager;
 }
 
-- (PWRewardedInterstitialAdUnitManager*)rewardedIterstitialAdUnitManager:(NSString*)adUnitId
-{
-  PWRewardedInterstitialAdUnitManager* manager = [self.rewardedIterstitialAdUnitManagers valueForKey:adUnitId];
-  if (!manager) {
-      manager = [[PWRewardedInterstitialAdUnitManager alloc] initWithAdUnit:adUnitId];
-      self.rewardedIterstitialAdUnitManagers[adUnitId] = manager;
-  }
-  return manager;
-}
-
 - (void)setGlobalTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting
 {
   [PlaywireSDK.shared.targeting clear];
   [PlaywireSDK.shared.targeting add:targeting];
-}
-
-- (void)startConsoleLogger
-{
-  isConsoleLoggerEnabled = YES;
-  [PWNotifier.shared startConsoleLoggerWithFilter:^BOOL(NSString * _Nonnull event, BOOL critical, NSDictionary<NSString *,id> * context) {
-      return !([event isEqualToString:@"adNetworksRegistration"]);
-  }];
 }
 
 - (void)setBanner:(NSString *)adUnitId
@@ -253,33 +230,6 @@ static BOOL isConsoleLoggerEnabled = NO;
   return unitManager.autoReloadOnExpiration;
 }
 
-#pragma mark - Rewarded Interstitial
-
-- (void)setRewardedInterstitial:(NSString *)adUnitId
-                  withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting
-{
-  PWRewardedInterstitialAdUnitManager *unitManager = [self rewardedIterstitialAdUnitManager:adUnitId];
-  [unitManager setTargeting:targeting];
-}
-
-- (void)loadRewardedInterstitial:(NSString *)adUnitId withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting
-{
-  PWRewardedInterstitialAdUnitManager *unitManager = [self rewardedIterstitialAdUnitManager:adUnitId];
-  [unitManager loadRewardedInterstitialWithTargeting:targeting];
-}
-
-- (BOOL)isRewardedInterstitialReady:(NSString *)adUnitId
-{
-  PWRewardedInterstitialAdUnitManager *unitManager = [self rewardedIterstitialAdUnitManager:adUnitId];
-  return [unitManager isRewardedInterstitialReady];
-}
-
-- (void)showRewardedInterstitial:(NSString *)adUnitId
-{
-  PWRewardedInterstitialAdUnitManager *unitManager = [self rewardedIterstitialAdUnitManager:adUnitId];
-  [unitManager showRewardedInterstitial];
-}
-
 #pragma mark - Test Ads
 
 - (void)setTestAds:(BOOL)isEnabled
@@ -302,5 +252,12 @@ static BOOL isConsoleLoggerEnabled = NO;
 - (PWCMPType)getCMP
 {
   return PlaywireSDK.shared.cmp;
+}
+
+#pragma mark - Log Level
+
+- (void)setLogLevel:(LogLevel)level
+{
+  PlaywireSDK.shared.logLevel = level;
 }
 @end

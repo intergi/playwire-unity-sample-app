@@ -44,20 +44,10 @@ namespace PlaywireSDKConstant
             internal const string Clicked = "PW_OnAppOpenAdClickedEvent";
         }
 
-        internal static class RewardedInterstitial
-        {
-            internal const string Loaded = "PW_OnRewardedInterstitialAdLoadedEvent";
-            internal const string FailedToLoad = "PW_OnRewardedInterstitialAdFailedToLoadEvent";
-            internal const string Opened = "PW_OnRewardedInterstitialAdOpenedEvent";
-            internal const string FailedToOpen = "PW_OnRewardedInterstitialAdFailedToOpenEvent";
-            internal const string Closed = "PW_OnRewardedInterstitialAdClosedEvent";
-            internal const string RecordedImpression = "PW_OnRewardedInterstitialAdRecordedImpressionEvent";
-            internal const string Earned = "PW_OnRewardedInterstitialAdEarnedEvent";
-            internal const string Clicked = "PW_OnRewardedInterstitialAdClickedEvent";
-        }
         internal static class SDK
         {
             internal const string Initialization = "PW_OnSDKInitializedEvent";
+            internal const string Start = "PW_OnSDKStartEvent";
         }
     }
 }

@@ -41,7 +41,6 @@ public class HomeScreen : MonoBehaviour
         new AdTypeItem { key = "Rewarded - MAX", adUnitName = "rewarded-video-max" },
     };
 
-    private bool isInitialized = false;
     private string currentAdUnit;
 
     void Start()
@@ -58,15 +57,19 @@ public class HomeScreen : MonoBehaviour
         #endif
 
         // Log SDK events to console.
-        PlaywireSDK.StartConsoleLogger();
+        PlaywireSDK.SetLogLevel(PlaywireSDKBase.LogLevel.Info);
         // Set to `true` to test your implementation with GAM test ads on real devices.
         PlaywireSDK.Test = false;
+
+////// do not commit
+        PlaywireSDK.CMP = PlaywireSDKBase.CMP.GoogleUMP;
+///////
 
         // Subscribe to Events
         RegisterCallbacks();
 
-        // Initialize SDK
-        PlaywireSDK.InitializeSDK(pubId, appId);
+        // Start SDK
+        PlaywireSDK.StartSDK(pubId, appId);
         
         // Show Native Loading State
         UpdateNativeStatus("Initializing SDK...");
@@ -160,9 +163,12 @@ public class HomeScreen : MonoBehaviour
 
     void RegisterCallbacks()
     {
-        PlaywireSDKCallback.OnSDKInitializedEvent += () => {
-            isInitialized = true;
-            ShowNativeList(); // SDK Ready -> Show the list
+        PlaywireSDKCallback.OnSDKStartEvent += (success, error) => {
+            if (success) {
+                ShowNativeList();
+            } else {
+                ShowNativeDetailScreen("SDK Start Failed", error);
+            }
         };
 
         // --- BANNER ---
