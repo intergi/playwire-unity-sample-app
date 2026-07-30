@@ -5,8 +5,8 @@
 
 #import <Foundation/Foundation.h>
 #import <GoogleMobileAds/GoogleMobileAds.h>
-#import <PlaywireMobile/PlaywireMobile-Swift.h>
-#import <Playwire-Swift.h>
+#import <Playwire/Playwire-Swift.h>
+#import <UnityFramework/UnityFramework-Swift.h>
 #import "PWUnityPlugin.h"
 #import "PWUnityManager.h"
 
@@ -15,6 +15,7 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
 void _PlaywireInitializeSDK(const char *cPublisherId, const char *cAppId)
 {
     NSString *publisherId = NSSTRING(cPublisherId);
@@ -29,6 +30,34 @@ void _PlaywireInitializeSDK(const char *cPublisherId, const char *cAppId)
         [PWUnityManager sendUnityMessage:message];
     }];
 }
+
+void _PlaywireStartSDK(const char *cPublisherId, const char *cAppId)
+{
+    NSString *publisherId = NSSTRING(cPublisherId);
+    NSString *appId = NSSTRING(cAppId);
+
+    [PlaywireSDK.shared startWithPublisherId:publisherId
+                                       appId:appId
+                              viewController:[PWUnityManager unityViewController]
+                                  completion:^(BOOL success, NSError * _Nullable error) {
+        if (success) {
+            onInitialize();
+            NSDictionary<NSString *, NSString *> *parameters = @{ @"success" : @"true", @"error" : @"" };
+            NSString *message = [PWUnityMessageBuilder buildWithName:PW_SDK_Start_Event
+                                                            adUnitId:@""
+                                                          parameters:parameters];
+            [PWUnityManager sendUnityMessage:message];
+        } else {
+            NSString *errorMessage = error != nil ? error.localizedDescription : @"Unknown start error";
+            NSDictionary<NSString *, NSString *> *parameters = @{ @"success" : @"false", @"error" : errorMessage };
+            NSString *message = [PWUnityMessageBuilder buildWithName:PW_SDK_Start_Event
+                                                            adUnitId:@""
+                                                          parameters:parameters];
+            [PWUnityManager sendUnityMessage:message];
+        }
+    }];
+}
+
 #ifdef __cplusplus
 }
 #endif

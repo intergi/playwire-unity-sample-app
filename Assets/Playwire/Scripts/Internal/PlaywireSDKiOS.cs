@@ -13,15 +13,17 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
     #region Initialization
 
+    [Obsolete("InitializeSDK is deprecated. Use StartSDK instead.")]
     public static void InitializeSDK(string publisherId, string appId)
     {
         _PlaywireInitializeSDK(publisherId, appId);
     }
 
-    public static void StartConsoleLogger()
-    {
-        _PlaywireStartConsoleLogger();
+    public static void StartSDK(string publisherId, string appId)
+    {   
+        _PlaywireStartSDK(publisherId, appId);
     }
+
 
     public static bool Test { 
         get {
@@ -45,6 +47,11 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         set {
             _PlaywireSetCMP(value.ToString());
         }
+    }
+
+    public static void SetLogLevel(PlaywireSDKBase.LogLevel level)
+    {
+        _PlaywireSetLogLevel((int)level);
     }
 
     #endregion Initialization
@@ -183,37 +190,11 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
     #endregion AppOpenAd
 
-    #region Rewarded Interstitial
-
-    public static void SetRewardedInterstitialTargeting(string adUnitId, PlaywireSDKTargeting targeting) 
-    {
-        string targets = targeting != null ? targeting.ToString() : null;
-        _PlaywireSetRewardedInterstitialTargeting(adUnitId, targets);
-    }
-
-    public static void LoadRewardedInterstitial(string adUnitId, PlaywireSDKTargeting targeting = null)
-    {
-        string loadTargets = targeting != null ? targeting.ToString() : null;
-        _PlaywireLoadRewardedInterstitial(adUnitId, loadTargets);
-    }
-
-    public static bool IsRewardedInterstitialReady(string adUnitId)
-    {
-        return _PlaywireIsRewardedInterstitialReady(adUnitId);
-    }
-
-    public static void ShowRewardedInterstitial(string adUnitId)
-    {
-        _PlaywireShowRewardedInterstitial(adUnitId);
-    }
-
-    #endregion Rewarded Interstitial
-
     #region DllImports
     #if ENABLE_IL2CPP && UNITY_ANDROID
         private static void _PlaywireInitializeSDK(string publisherId, string appId) {}
 
-        private static void _PlaywireStartConsoleLogger() {}
+        private static void _PlaywireStartSDK(string publisherId, string appId) {}
 
         private static void _PlaywireSetGlobalTargeting(string targeting) {}
 
@@ -263,15 +244,6 @@ public class PlaywireSDKiOS : PlaywireSDKBase
             return false;
         }
 
-        private static void _PlaywireSetRewardedInterstitialTargeting(string adUnitId, string targeting) {}
-
-        private static void _PlaywireLoadRewardedInterstitial(string adUnitId, string targeting) {}
-
-        private static void _PlaywireShowRewardedInterstitial(string adUnitId) {}
-
-        private static bool _PlaywireIsRewardedInterstitialReady(string adUnitId) {
-            return false;
-        }
 
         private static void _PlaywireSetTestAds(bool isEnabled) {}
 
@@ -281,6 +253,8 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         private static void _PlaywireSetCMP(string type) {}
 
+        private static void _PlaywireSetLogLevel(int level) {}
+
         private static string _PlaywireGetCMP() {
             return "GoogleUMP";
         }
@@ -289,7 +263,7 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         private static extern void _PlaywireInitializeSDK(string publisherId, string appId);
 
         [DllImport("__Internal")]
-        private static extern void _PlaywireStartConsoleLogger();
+        private static extern void _PlaywireStartSDK(string publisherId, string appId);
 
         [DllImport("__Internal")]
         private static extern void _PlaywireSetGlobalTargeting(string targeting);
@@ -355,18 +329,6 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         private static extern bool _PlaywireGetAppOpenAdReloadOnExpiration(string adUnitId);
 
         [DllImport("__Internal")]
-        private static extern void _PlaywireSetRewardedInterstitialTargeting(string adUnitId, string targeting);
-
-        [DllImport("__Internal")]
-        private static extern void _PlaywireLoadRewardedInterstitial(string adUnitId, string targeting);
-
-        [DllImport("__Internal")]
-        private static extern void _PlaywireShowRewardedInterstitial(string adUnitId);
-
-        [DllImport("__Internal")]
-        private static extern bool _PlaywireIsRewardedInterstitialReady(string adUnitId);
-
-        [DllImport("__Internal")]
         private static extern void _PlaywireSetTestAds(bool isEnabled);
 
         [DllImport("__Internal")]
@@ -374,6 +336,9 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         [DllImport("__Internal")]
         private static extern void _PlaywireSetCMP(string type);
+
+        [DllImport("__Internal")]
+        private static extern void _PlaywireSetLogLevel(int level);
 
         [DllImport("__Internal")]
         private static extern string _PlaywireGetCMP();

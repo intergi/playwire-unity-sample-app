@@ -6,8 +6,7 @@
 #include "math.h"
 #import "PWUnityManager.h"
 #import "PWAdPosition.h"
-#import <PlaywireMobile/PlaywireMobile-Swift.h>
-#import <Playwire-Swift.h>
+#import <Playwire/Playwire-Swift.h>
 
 #define NSSTRING(_CSTRING) ( (_CSTRING != NULL) ? [NSString stringWithCString:_CSTRING encoding:NSStringEncodingConversionAllowLossy] : nil)
 
@@ -92,7 +91,7 @@ extern "C" {
     static bool _isUnityManagerInitialized = false;
     static bool _isInitialized = false;
 
-    bool isInitialized()
+    bool pwUnityIsInitialized()
     {
         return _isInitialized;
     }
@@ -109,12 +108,6 @@ extern "C" {
     extern void onInitialize() {
         initializeUnityManagerIfNeeded();
         _isInitialized = true;
-    }
-
-    void _PlaywireStartConsoleLogger()
-    {
-        initializeUnityManagerIfNeeded();
-        [_unityManager startConsoleLogger];
     }
 
     void _PlaywireSetGlobalTargeting(const char *cCustomTargets)
@@ -368,56 +361,6 @@ extern "C" {
        return [_unityManager getAppOpenAdReloadOnExpiration:adUnitId];
     }
 
-    # pragma mark - Rewarded Interstitial
-
-    void _PlaywireSetRewardedInterstitialTargeting(const char *cAdUnitId, const char *cCustomTargets)
-    {
-        NSString *adUnitId = NSSTRING(cAdUnitId);
-        NSString *targeting = NSSTRING(cCustomTargets);
-        NSDictionary<NSString *, NSString *>* customTargets = [PWUnityPluginHelper decodeCustomTargetsFromString:targeting];
-
-        if (!_isInitialized) {
-            NSLog(@"[%@] _PlaywireSetRewardedInterstitialTargeting: SDK is not initialized, rewarded interstitial targeting cannot not be set.", LOGTAG);
-            return;
-        }
-        [_unityManager setRewardedInterstitial:adUnitId withTargeting:customTargets];
-    }
-
-    void _PlaywireLoadRewardedInterstitial(const char *cAdUnitId, const char *cCustomTargets)
-    {
-        NSString *adUnitId = NSSTRING(cAdUnitId);
-        NSString *targeting = NSSTRING(cCustomTargets);
-        NSDictionary<NSString *, NSString *>* customTargets = [PWUnityPluginHelper decodeCustomTargetsFromString:targeting];
-
-        if (!_isInitialized) {
-            NSLog(@"[%@] _PlaywireLoadRewardedInterstitial: SDK is not initialized, rewarded interstitial cannot not loaded.", LOGTAG);
-            return;
-        }
-        [_unityManager loadRewardedInterstitial:adUnitId withTargeting:customTargets];
-    }
-
-    bool _PlaywireIsRewardedInterstitialReady(const char *cAdUnitId)
-    {
-        NSString *adUnitId = NSSTRING(cAdUnitId);
-
-        if (!_isInitialized) {
-            NSLog(@"[%@] _PlaywireIsRewardedInterstitialReady: SDK is not initialized, rewarded interstiitial is not loaded.", LOGTAG);
-            return false;
-        }
-       return  [_unityManager isRewardedInterstitialReady:adUnitId];
-    }
-
-    void _PlaywireShowRewardedInterstitial(const char *cAdUnitId)
-    {
-        NSString *adUnitId = NSSTRING(cAdUnitId);
-
-        if (!_isInitialized) {
-            NSLog(@"[%@] _PlaywireShowRewardedInterstitial: SDK is not initialized, rewarded interstiitial is not loaded.", LOGTAG);
-            return;
-        }
-        [_unityManager showRewardedInterstitial:adUnitId];
-    }
-
     void _PlaywireSetTestAds(bool isEnabled)
     {
         [_unityManager setTestAds:isEnabled];
@@ -434,6 +377,28 @@ extern "C" {
         PWCMPType type = [PWUnityPluginHelper cmpType:typeString];
 
         [_unityManager setCMP:type];
+    }
+
+    void _PlaywireSetLogLevel(int level)
+    {
+        initializeUnityManagerIfNeeded();
+
+        LogLevel logLevel;
+        switch (level) {
+        case 1:
+            logLevel = LogLevelError;
+            break;
+        case 2:
+            logLevel = LogLevelWarning;
+            break;
+        case 3:
+            logLevel = LogLevelInfo;
+            break;
+        default:
+            logLevel = LogLevelNone;
+            break;
+        }
+        [_unityManager setLogLevel:logLevel];
     }
 
     char* cStringCopy(const char* string)

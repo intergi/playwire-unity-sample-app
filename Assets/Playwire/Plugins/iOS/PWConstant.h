@@ -10,6 +10,8 @@
 
     /// SDK
     static NSString *const PW_SDK_Initialization_Event = @"PW_OnSDKInitializedEvent";
+    static NSString *const PW_SDK_Start_Event = @"PW_OnSDKStartEvent";
+
 
     /// Banner
     static NSString *const PW_Banner_Loaded_Event = @"PW_OnBannerLoadedEvent";
@@ -46,15 +48,5 @@
     static NSString *const PW_AppOpenAd_Closed_Event = @"PW_OnAppOpenAdClosedEvent";
     static NSString *const PW_AppOpenAd_RecordedImpression_Event = @"PW_OnAppOpenAdRecordedImpressionEvent";
     static NSString *const PW_AppOpenAd_Clicked_Event = @"PW_OnAppOpenAdClickedEvent";
-
-    /// Rewarded
-    static NSString *const PW_RewardedInterstitial_Loaded_Event = @"PW_OnRewardedInterstitialAdLoadedEvent";
-    static NSString *const PW_RewardedInterstitial_FailedToLoad_Event = @"PW_OnRewardedInterstitialAdFailedToLoadEvent";
-    static NSString *const PW_RewardedInterstitial_Opened_Event = @"PW_OnRewardedInterstitialAdOpenedEvent";
-    static NSString *const PW_RewardedInterstitial_FailedToOpen_Event = @"PW_OnRewardedInterstitialAdFailedToOpenEvent";
-    static NSString *const PW_RewardedInterstitial_Closed_Event = @"PW_OnRewardedInterstitialAdClosedEvent";
-    static NSString *const PW_RewardedInterstitial_RecordedImpression_Event = @"PW_OnRewardedInterstitialAdRecordedImpressionEvent";
-    static NSString *const PW_RewardedInterstitial_Earned_Event = @"PW_OnRewardedInterstitialAdEarnedEvent";
-    static NSString *const PW_RewardedInterstitial_Clicked_Event = @"PW_OnRewardedInterstitialAdClickedEvent";
 
 #endif

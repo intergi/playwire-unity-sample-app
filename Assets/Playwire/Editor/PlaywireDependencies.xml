@@ -1,12 +1,9 @@
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.intergi.playwire:playwiresdk_total:12.1.1" />
+    <androidPackage spec="com.intergi.playwire:playwiresdk_total:13.0.0-alpha.5" />
     <androidPackage spec="com.google.code.gson:gson:2.8.8" />
   </androidPackages>
   <iosPods>
-    <sources>
-      <source>https://github.com/CocoaPods/Specs</source>
-    </sources>
-    <iosPod name="Playwire" version="12.1.1" />
+    <iosPod name="Playwire/Static" version="13.0.0-alpha.9" />
   </iosPods>
 </dependencies>

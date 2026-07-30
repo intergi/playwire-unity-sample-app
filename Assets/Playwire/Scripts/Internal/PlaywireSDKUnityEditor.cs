@@ -16,24 +16,30 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
     #region Initialization
 
     /// <summary>
-    /// Initializes the Playwire Unity SDK. Call this method before loading and showing any ads requests.
+    /// Initializes the Playwire Unity SDK. Call this method before loading and showing ads.
     /// <param name="publisherId">A string value with the publisher identifier.</param>
     /// <param name="appId">A string value with an application identifier.</param>
     /// <para>
     /// See <see cref="PlaywireSDKCallback.OnSDKInitializedEvent"/> for the resulting triggered event.
     /// </para>
     /// </summary>
+    [Obsolete("InitializeSDK is deprecated. Use StartSDK instead.")]
     public static void InitializeSDK(string publisherId, string appId)
     {
         Debug.Log($"[{LogTag}: InitializeSDK] UnityEditor is not supported now.");
     }
 
     /// <summary>
-    /// Start writting logs to console.
+    /// Starts the Playwire Unity SDK. Call this method before loading and showing ads.
+    /// <param name="publisherId">A string value with the publisher identifier.</param>
+    /// <param name="appId">A string value with an application identifier.</param>
+    /// <para>
+    /// See <see cref="PlaywireSDKCallback.OnSDKStartEvent"/> for the resulting triggered event.
+    /// </para>
     /// </summary>
-    public static void StartConsoleLogger()
+    public static void StartSDK(string publisherId, string appId)
     {
-        Debug.Log($"[{LogTag}:StartConsoleLogger] UnityEditor is not supported now.");
+        Debug.Log($"[{LogTag}: StartSDK] UnityEditor is not supported now.");
     }
 
     /// <summary>
@@ -42,7 +48,7 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
     /// See <see cref="PlaywireSDKBase.CMP"/> for the available options.
     /// </para>
     /// </summary>
-    public static PlaywireSDKBase.CMP CMP {
+    public static new PlaywireSDKBase.CMP CMP {
         get {
             Debug.Log($"[{LogTag}:CMP] UnityEditor is not supported now.");
             return PlaywireSDKBase.CMP.GoogleUMP;
@@ -50,6 +56,11 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
         set {
             Debug.Log($"[{LogTag}:CMP] UnityEditor is not supported now.");
         }
+    }
+
+    public static void SetLogLevel(PlaywireSDKBase.LogLevel level)
+    {
+        Debug.Log($"[{LogTag}:SetLogLevel] UnityEditor is not supported now.");
     }
 
     #endregion Initialization
@@ -307,55 +318,5 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
 
     #endregion AppOpenAd
 
-    #region Rewarded Interstitial
-
-    /// <summary>
-    /// Set rewarded interstitial's targeting to be used for every ad request.
-    /// </summary>
-    /// <param name="adUnitId">A string with the ad unit id.</param>
-    /// <param name="targeting">A targeting value with any tags.</param>
-    public static void SetRewardedInterstitialTargeting(string adUnitId, PlaywireSDKTargeting targeting) 
-    {
-        Debug.Log($"[{LogTag}:SetRewardedInterstitialTargeting] UnityEditor is not supported now.");
-    }
-
-    /// <summary>
-    /// Fetches a rewarded interstitial ad content.
-    /// <para>
-    /// Subscribe for <see cref="PlaywireSDKCallback.RewardedInterstitial.OnLoadedEvent"/> to handle a successful response, otherwise see <see cref="PlaywireSDKCallback.RewardedInterstitial.OnFailedToLoadEvent"/>.
-    /// </para>
-    /// </summary>
-    /// <param name="adUnitId">A string with the ad unit id.</param>
-    public static void LoadRewardedInterstitial(string adUnitId, PlaywireSDKTargeting targeting = null)
-    {
-        Debug.Log($"[{LogTag}:LoadRewardedInterstitial] UnityEditor is not supported now.");
-    }
-
-    /// <summary>
-    /// Whether a rewarded interstitial ad is ready to be presented or not.
-    /// </summary>
-    /// <param name="adUnitId">A string with the ad unit id.</param>
-    /// <returns> If a rewarded interstitial ad has been loaded and hasn't been presented yet, this method returns <c>true</c>, otherwise - <c>false</c>. </returns>
-    public static bool IsRewardedInterstitialReady(string adUnitId)
-    {
-        return false;
-    }
-
-    /// <summary>
-    /// Displays an already-loaded rewarded interstitial ad.
-    /// <para>
-    /// Subscribe for <see cref="PlaywireSDKCallback.RewardedInterstitial.OnOpenedEvent"/> or <see cref="PlaywireSDKCallback.RewardedInterstitial.OnFailedToOpenEvent"/> to observe a presentation result.
-    /// </para>
-    /// <para>
-    /// Subscribe for <see cref="PlaywireSDKCallback.RewardedInterstitial.OnClosedEvent"/> to observe a dismissal result.
-    /// </para>
-    /// </summary>
-    /// <param name="adUnitId">A string with the ad unit id.</param>
-    public static void ShowRewardedInterstitial(string adUnitId)
-    {
-        Debug.Log($"[{LogTag}:ShowRewardedInterstitial] UnityEditor is not supported now.");
-    }
-
-    #endregion Rewarded Interstitial
 }
 #endif

@@ -27,8 +27,9 @@ public class PlaywireSDKCallback : MonoBehaviour
     private static Action _onSDKInitializedEvent;
 
     /// <summary>
-    /// It's fired when the Playwire SDK has finished initialization.
+    /// It's fired when the Playwire SDK has finished initialization via InitializeSDK.
     /// </summary>
+    [Obsolete("OnSDKInitializedEvent is deprecated. Use OnSDKStartEvent instead.")]
     public static event Action OnSDKInitializedEvent
     {
         add
@@ -41,12 +42,29 @@ public class PlaywireSDKCallback : MonoBehaviour
         }
     }
 
+    private static Action<bool, string> _onSDKStartEvent;
+
+    /// <summary>
+    /// It's fired when the Playwire SDK start completes with success or failure.
+    /// </summary>
+    public static event Action<bool, string> OnSDKStartEvent
+    {
+        add
+        {
+            _onSDKStartEvent += value;
+        }
+        remove
+        {
+            _onSDKStartEvent -= value;
+        }
+    }
+
     #endregion SDK
 
     # region Banner
 
     private static Action<PlaywireSDKEventArgs> _onBannerLoadedEvent;
-    private static Action<PlaywireSDKEventArgs> _onBannerFailedToLoadEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onBannerFailedToLoadEvent;
     private static Action<PlaywireSDKEventArgs> _onBannerOpenedEvent;
     private static Action<PlaywireSDKEventArgs> _onBannerClosedEvent;
     private static Action<PlaywireSDKEventArgs> _onBannerClickedEvent;
@@ -71,7 +89,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the banner ad failed to load content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
         {
             add
             {
@@ -149,9 +167,9 @@ public class PlaywireSDKCallback : MonoBehaviour
     #region Interstitials
 
     private static Action<PlaywireSDKEventArgs> _onInterstitialLoadedEvent;
-    private static Action<PlaywireSDKEventArgs> _onInterstitialFailedToLoadEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onInterstitialFailedToLoadEvent;
     private static Action<PlaywireSDKEventArgs> _onInterstitialOpenedEvent;
-    private static Action<PlaywireSDKEventArgs> _onInterstitialFailedToOpenEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onInterstitialFailedToOpenEvent;
     private static Action<PlaywireSDKEventArgs> _onInterstitialClosedEvent;
     private static Action<PlaywireSDKEventArgs> _onInterstitialRecordedImpressionEvent;
     private static Action<PlaywireSDKEventArgs> _onInterstitialClickedEvent;
@@ -176,7 +194,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the interstitial ad failed to load full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
         {
             add
             {
@@ -205,7 +223,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the interstitial ad failed to present full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
         {
             add
             {
@@ -268,9 +286,9 @@ public class PlaywireSDKCallback : MonoBehaviour
     #region Rewarded
 
     private static Action<PlaywireSDKEventArgs> _onRewardedLoadedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedFailedToLoadEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onRewardedFailedToLoadEvent;
     private static Action<PlaywireSDKEventArgs> _onRewardedOpenedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedFailedToOpenEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onRewardedFailedToOpenEvent;
     private static Action<PlaywireSDKEventArgs> _onRewardedClosedEvent;
     private static Action<PlaywireSDKEventArgs> _onRewardedRecordedImpressionEvent;
     private static Action<PlaywireSDKAdRewardEventArgs> _onRewardedEarnedEvent;
@@ -295,7 +313,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the rewarded ad failed to load full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
         {
             add
             {
@@ -325,7 +343,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the rewarded ad failed to present full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
         {
             add
             {
@@ -404,9 +422,9 @@ public class PlaywireSDKCallback : MonoBehaviour
     #region AppOpenAd
 
     private static Action<PlaywireSDKEventArgs> _onAppOpenAdLoadedEvent;
-    private static Action<PlaywireSDKEventArgs> _onAppOpenAdFailedToLoadEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onAppOpenAdFailedToLoadEvent;
     private static Action<PlaywireSDKEventArgs> _onAppOpenAdOpenedEvent;
-    private static Action<PlaywireSDKEventArgs> _onAppOpenAdFailedToOpenEvent;
+    private static Action<PlaywireSDKErrorEventArgs> _onAppOpenAdFailedToOpenEvent;
     private static Action<PlaywireSDKEventArgs> _onAppOpenAdClosedEvent;
     private static Action<PlaywireSDKEventArgs> _onAppOpenAdRecordedImpressionEvent;
     private static Action<PlaywireSDKEventArgs> _onAppOpenAdClickedEvent;
@@ -431,7 +449,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the app open ad failed to load full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToLoadEvent
         {
             add
             {
@@ -460,7 +478,7 @@ public class PlaywireSDKCallback : MonoBehaviour
         /// <summary>
         /// It's fired when the app open ad failed to present full screen content.
         /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
+        public static event Action<PlaywireSDKErrorEventArgs> OnFailedToOpenEvent
         {
             add
             {
@@ -520,142 +538,6 @@ public class PlaywireSDKCallback : MonoBehaviour
 
     #endregion AppOpenAd
 
-    #region Rewarded Interstitial
-
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialLoadedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialFailedToLoadEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialOpenedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialFailedToOpenEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialClosedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialRecordedImpressionEvent;
-    private static Action<PlaywireSDKAdRewardEventArgs> _onRewardedInterstitialEarnedEvent;
-    private static Action<PlaywireSDKEventArgs> _onRewardedInterstitialClickedEvent;
-
-    public static class RewardedInterstitial {
-        /// <summary>
-        /// It's fired when the rewarded interstitial ad successfully loaded full screen content.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnLoadedEvent
-        {
-            add
-            {
-                _onRewardedInterstitialLoadedEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialLoadedEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when the rewarded interstitial ad failed to load full screen content.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToLoadEvent
-        {
-            add
-            {
-                _onRewardedInterstitialFailedToLoadEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialFailedToLoadEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when the rewarded interstitial ad presented full screen content.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnOpenedEvent
-        {
-            add
-            {
-                _onRewardedInterstitialOpenedEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialOpenedEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when the rewarded interstitial ad failed to present full screen content.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnFailedToOpenEvent
-        {
-            add
-            {
-                _onRewardedInterstitialFailedToOpenEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialFailedToOpenEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when an rewarded interstitial ad dismissed full screen content.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnClosedEvent
-        {
-            add
-            {
-                _onRewardedInterstitialClosedEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialClosedEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when an impression has been recorded for the rewarded interstitial ad.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnRecordedImpressionEvent
-        {
-            add
-            {
-                _onRewardedInterstitialRecordedImpressionEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialRecordedImpressionEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when a reward interstitial has been earned.
-        /// </summary>
-        public static event Action<PlaywireSDKAdRewardEventArgs> OnEarnedEvent
-        {
-            add
-            {
-                _onRewardedInterstitialEarnedEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialEarnedEvent -= value;
-            }
-        }
-
-        /// <summary>
-        /// It's fired when a click has been recorded for the rewarded interstitial ad.
-        /// </summary>
-        public static event Action<PlaywireSDKEventArgs> OnClickedEvent
-        {
-            add
-            {
-                _onRewardedInterstitialClickedEvent += value;
-            }
-            remove
-            {
-                _onRewardedInterstitialClickedEvent -= value;
-            }
-        }
-
-    }
-
-    #endregion Rewarded
-
     private void HandleEvent(string totalMessage)
     {
         proccessMessage(totalMessage);
@@ -669,11 +551,69 @@ public class PlaywireSDKCallback : MonoBehaviour
         }
     }
 
+    private static void InvokeSDKStartEvent(Action<bool, string> action, PlaywireSDKEventMessage message)
+    {
+        if (action == null) return;
+
+        bool success = false;
+        string error = "";
+
+        if (!string.IsNullOrEmpty(message.parameters))
+        {
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(message.parameters);
+                string json = Encoding.UTF8.GetString(bytes);
+                SDKStartResult result = JsonUtility.FromJson<SDKStartResult>(json);
+                success = string.Equals(result.success, "true", StringComparison.OrdinalIgnoreCase);
+                error = result.error ?? "";
+            }
+            catch
+            {
+                success = false;
+                error = "Unknown start error";
+            }
+        }
+
+        action.Invoke(success, error);
+    }
+
+    [Serializable]
+    private class SDKStartResult
+    {
+        public string success;
+        public string error;
+    }
+
     private static void InvokeEvent(Action<PlaywireSDKEventArgs> action, string adUnitId)
     {
         if (action != null)
         {
             action.Invoke(new PlaywireSDKEventArgs(adUnitId));
+        }
+    }
+
+    private static void invokeAdErrorEvent(Action<PlaywireSDKErrorEventArgs> action, PlaywireSDKEventMessage message)
+    {
+        if (action == null) return;
+        
+        if (string.IsNullOrEmpty(message.parameters))
+        {
+            // Fallback for null error payload (though the native should strictly pass non-null)
+            action.Invoke(new PlaywireSDKErrorEventArgs(message.adUnitId, new PlaywireAdError(1000, "unknown", "Unknown error", new System.Collections.Generic.Dictionary<string, object>())));
+            return;
+        }
+
+        try {
+            var bytes = System.Convert.FromBase64String(message.parameters);
+            string parameters = System.Text.Encoding.UTF8.GetString(bytes);
+
+            PlaywireAdErrorPayload payload = JsonUtility.FromJson<PlaywireAdErrorPayload>(parameters);
+            int codeValue = int.TryParse(payload.code, out int c) ? c : 1000;
+            var error = new PlaywireAdError(codeValue, payload.name, payload.message, new System.Collections.Generic.Dictionary<string, object>());
+            action.Invoke(new PlaywireSDKErrorEventArgs(message.adUnitId, error));
+        } catch {
+            action.Invoke(new PlaywireSDKErrorEventArgs(message.adUnitId, new PlaywireAdError(1000, "unknown", "Failed to parse error payload", new System.Collections.Generic.Dictionary<string, object>())));
         }
     }
 
@@ -707,11 +647,14 @@ public class PlaywireSDKCallback : MonoBehaviour
             case PlaywireSDKConstant.Event.SDK.Initialization:
                 InvokeAction(_onSDKInitializedEvent);
                 break;
+            case PlaywireSDKConstant.Event.SDK.Start:
+                InvokeSDKStartEvent(_onSDKStartEvent, message);
+                break;
             case PlaywireSDKConstant.Event.Banner.Loaded:
                 InvokeEvent(_onBannerLoadedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.Banner.FailedToLoad:
-                InvokeEvent(_onBannerFailedToLoadEvent, message.adUnitId);
+                invokeAdErrorEvent(_onBannerFailedToLoadEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Banner.Opened:
                 InvokeEvent(_onBannerOpenedEvent, message.adUnitId);
@@ -729,13 +672,13 @@ public class PlaywireSDKCallback : MonoBehaviour
                 InvokeEvent(_onInterstitialLoadedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.Interstitial.FailedToLoad:
-                InvokeEvent(_onInterstitialFailedToLoadEvent, message.adUnitId);
+                invokeAdErrorEvent(_onInterstitialFailedToLoadEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Interstitial.Opened:
                 InvokeEvent(_onInterstitialOpenedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.Interstitial.FailedToOpen:
-                InvokeEvent(_onInterstitialFailedToOpenEvent, message.adUnitId);
+                invokeAdErrorEvent(_onInterstitialFailedToOpenEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Interstitial.Closed:
                 InvokeEvent(_onInterstitialClosedEvent, message.adUnitId);
@@ -750,13 +693,13 @@ public class PlaywireSDKCallback : MonoBehaviour
                 InvokeEvent(_onRewardedLoadedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.Rewarded.FailedToLoad:
-                InvokeEvent(_onRewardedFailedToLoadEvent, message.adUnitId);
+                invokeAdErrorEvent(_onRewardedFailedToLoadEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Rewarded.Opened:
                 InvokeEvent(_onRewardedOpenedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.Rewarded.FailedToOpen:
-                InvokeEvent(_onRewardedFailedToOpenEvent, message.adUnitId);
+                invokeAdErrorEvent(_onRewardedFailedToOpenEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Rewarded.Closed:
                 InvokeEvent(_onRewardedClosedEvent, message.adUnitId);
@@ -774,13 +717,13 @@ public class PlaywireSDKCallback : MonoBehaviour
                 InvokeEvent(_onAppOpenAdLoadedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.AppOpenAd.FailedToLoad:
-                InvokeEvent(_onAppOpenAdFailedToLoadEvent, message.adUnitId);
+                invokeAdErrorEvent(_onAppOpenAdFailedToLoadEvent, message);
                 break;
             case PlaywireSDKConstant.Event.AppOpenAd.Opened:
                 InvokeEvent(_onAppOpenAdOpenedEvent, message.adUnitId);
                 break;
             case PlaywireSDKConstant.Event.AppOpenAd.FailedToOpen:
-                InvokeEvent(_onAppOpenAdFailedToOpenEvent, message.adUnitId);
+                invokeAdErrorEvent(_onAppOpenAdFailedToOpenEvent, message);
                 break;
             case PlaywireSDKConstant.Event.AppOpenAd.Closed:
                 InvokeEvent(_onAppOpenAdClosedEvent, message.adUnitId);
@@ -790,30 +733,6 @@ public class PlaywireSDKCallback : MonoBehaviour
                 break;
             case PlaywireSDKConstant.Event.AppOpenAd.Clicked:
                 InvokeEvent(_onAppOpenAdClickedEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.Loaded:
-                InvokeEvent(_onRewardedInterstitialLoadedEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.FailedToLoad:
-                InvokeEvent(_onRewardedInterstitialFailedToLoadEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.Opened:
-                InvokeEvent(_onRewardedInterstitialOpenedEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.FailedToOpen:
-                InvokeEvent(_onRewardedInterstitialFailedToOpenEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.Closed:
-                InvokeEvent(_onRewardedInterstitialClosedEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.RecordedImpression:
-                InvokeEvent(_onRewardedInterstitialRecordedImpressionEvent, message.adUnitId);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.Earned:
-                invokeAdRewardEarnedEvent(_onRewardedInterstitialEarnedEvent, message);
-                break;
-            case PlaywireSDKConstant.Event.RewardedInterstitial.Clicked:
-                InvokeEvent(_onRewardedInterstitialClickedEvent, message.adUnitId);
                 break;
 
             default:
