@@ -18,7 +18,7 @@ public class PlaywireSDK :
     PlaywireSDKUnityEditor
 #endif
 {
-    private const string sdkVersion = "13.0.0-alpha.1";
+    private const string sdkVersion = "13.0.0";
 
     /// <summary>
     /// The version of the Playwire Unity SDK.

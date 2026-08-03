@@ -1,9 +1,9 @@
 <dependencies>
   <androidPackages>
-    <androidPackage spec="com.intergi.playwire:playwiresdk_total:13.0.0-alpha.5" />
+    <androidPackage spec="com.intergi.playwire:playwiresdk_total:13.0.0" />
     <androidPackage spec="com.google.code.gson:gson:2.8.8" />
   </androidPackages>
   <iosPods>
-    <iosPod name="Playwire/Static" version="13.0.0-alpha.9" />
+    <iosPod name="Playwire/Static" version="13.0.0" />
   </iosPods>
 </dependencies>
