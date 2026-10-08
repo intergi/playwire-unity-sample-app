@@ -43,6 +43,32 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
     }
 
     /// <summary>
+    /// Whether test ads should be used. Set this value before starting the SDK.
+    /// </summary>
+    public static bool Test {
+        get {
+            Debug.Log($"[{LogTag}:Test] UnityEditor is not supported now.");
+            return false;
+        }
+        set {
+            Debug.Log($"[{LogTag}:Test] UnityEditor is not supported now.");
+        }
+    }
+
+    /// <summary>
+    /// Whether ads should start muted. Set this value before starting the SDK.
+    /// </summary>
+    public static bool Muted {
+        get {
+            Debug.Log($"[{LogTag}:Muted] UnityEditor is not supported now.");
+            return false;
+        }
+        set {
+            Debug.Log($"[{LogTag}:Muted] UnityEditor is not supported now.");
+        }
+    }
+
+    /// <summary>
     /// Configures CMP inside the Playwire Unity SDK. Set this value before initialization.
     /// </para>
     /// See <see cref="PlaywireSDKBase.CMP"/> for the available options.
@@ -63,6 +89,24 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
         Debug.Log($"[{LogTag}:SetLogLevel] UnityEditor is not supported now.");
     }
 
+    /// <summary>
+    /// Checks if the user is in a region requiring a Privacy Options entry point (e.g., EEA/UK).
+    /// </summary>
+    public static bool IsPrivacyOptionsRequired {
+        get {
+            Debug.Log($"[{LogTag}:IsPrivacyOptionsRequired] UnityEditor is not supported now.");
+            return false;
+        }
+    }
+
+    /// <summary>
+    /// Displays the Privacy Options form so the user can modify or revoke consent choices.
+    /// </summary>
+    public static void ShowPrivacyOptionsForm()
+    {
+        Debug.Log($"[{LogTag}:ShowPrivacyOptionsForm] UnityEditor is not supported now.");
+    }
+
     #endregion Initialization
 
     #region Targeting
@@ -77,6 +121,15 @@ public class PlaywireSDKUnityEditor : PlaywireSDKBase
     }
 
     #endregion Targeting
+
+    #region WebView
+
+    public static void RegisterWebView(AndroidJavaObject webView)
+    {
+        Debug.Log($"[{LogTag}:RegisterWebView] UnityEditor is not supported now.");
+    }
+
+    #endregion WebView
 
     #region Banners
 

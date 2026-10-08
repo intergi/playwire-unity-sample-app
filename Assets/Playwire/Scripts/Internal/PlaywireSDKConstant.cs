@@ -48,6 +48,7 @@ namespace PlaywireSDKConstant
         {
             internal const string Initialization = "PW_OnSDKInitializedEvent";
             internal const string Start = "PW_OnSDKStartEvent";
+            internal const string PrivacyOptionsForm = "PW_OnPrivacyOptionsFormEvent";
         }
     }
 }

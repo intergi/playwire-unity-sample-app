@@ -11,6 +11,7 @@
     /// SDK
     static NSString *const PW_SDK_Initialization_Event = @"PW_OnSDKInitializedEvent";
     static NSString *const PW_SDK_Start_Event = @"PW_OnSDKStartEvent";
+    static NSString *const PW_SDK_PrivacyOptionsForm_Event = @"PW_OnPrivacyOptionsFormEvent";
 
 
     /// Banner

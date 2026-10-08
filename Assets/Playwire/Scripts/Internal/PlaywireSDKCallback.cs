@@ -59,6 +59,23 @@ public class PlaywireSDKCallback : MonoBehaviour
         }
     }
 
+    private static Action<bool> _onPrivacyOptionsFormEvent;
+
+    /// <summary>
+    /// It's fired when the Privacy Options form has been presented and dismissed, with `true` on success or `false` on error/dismissal.
+    /// </summary>
+    public static event Action<bool> OnPrivacyOptionsFormEvent
+    {
+        add
+        {
+            _onPrivacyOptionsFormEvent += value;
+        }
+        remove
+        {
+            _onPrivacyOptionsFormEvent -= value;
+        }
+    }
+
     #endregion SDK
 
     # region Banner
@@ -160,6 +177,7 @@ public class PlaywireSDKCallback : MonoBehaviour
                 _onBannerRecordedImpressionEvent -= value;
             }
         }
+
     }
 
     #endregion Banner
@@ -279,6 +297,7 @@ public class PlaywireSDKCallback : MonoBehaviour
                 _onInterstitialClickedEvent -= value;
             }
         }
+
     }
 
     #endregion Interstitials
@@ -534,6 +553,7 @@ public class PlaywireSDKCallback : MonoBehaviour
                 _onAppOpenAdClickedEvent -= value;
             }
         }
+
     }
 
     #endregion AppOpenAd
@@ -585,12 +605,42 @@ public class PlaywireSDKCallback : MonoBehaviour
         public string error;
     }
 
+    private static void InvokePrivacyOptionsFormEvent(Action<bool> action, PlaywireSDKEventMessage message)
+    {
+        if (action == null) return;
+
+        bool success = false;
+
+        if (!string.IsNullOrEmpty(message.parameters))
+        {
+            try
+            {
+                byte[] bytes = Convert.FromBase64String(message.parameters);
+                string json = Encoding.UTF8.GetString(bytes);
+                SuccessResult result = JsonUtility.FromJson<SuccessResult>(json);
+                success = result != null && string.Equals(result.success, "true", StringComparison.OrdinalIgnoreCase);
+            }
+            catch
+            {
+                success = false;
+            }
+        }
+
+        action.Invoke(success);
+    }
+
     private static void InvokeEvent(Action<PlaywireSDKEventArgs> action, string adUnitId)
     {
         if (action != null)
         {
             action.Invoke(new PlaywireSDKEventArgs(adUnitId));
         }
+    }
+
+   [Serializable]
+    private class SuccessResult
+    {
+        public string success;
     }
 
     private static void invokeAdErrorEvent(Action<PlaywireSDKErrorEventArgs> action, PlaywireSDKEventMessage message)
@@ -649,6 +699,9 @@ public class PlaywireSDKCallback : MonoBehaviour
                 break;
             case PlaywireSDKConstant.Event.SDK.Start:
                 InvokeSDKStartEvent(_onSDKStartEvent, message);
+                break;
+            case PlaywireSDKConstant.Event.SDK.PrivacyOptionsForm:
+                InvokePrivacyOptionsFormEvent(_onPrivacyOptionsFormEvent, message);
                 break;
             case PlaywireSDKConstant.Event.Banner.Loaded:
                 InvokeEvent(_onBannerLoadedEvent, message.adUnitId);

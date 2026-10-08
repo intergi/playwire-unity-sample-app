@@ -117,6 +117,22 @@ extern "C" {
         [_unityManager setGlobalTargeting:customTargets];
     }
 
+    #pragma mark - WebView
+
+    void _PlaywireRegisterWebView(void *webViewPtr)
+    {
+        if (webViewPtr == NULL) {
+            NSLog(@"[%@] _PlaywireRegisterWebView: WebView is null.", LOGTAG);
+            return;
+        }
+
+        initializeUnityManagerIfNeeded();
+
+        WKWebView *webView = (__bridge WKWebView *)webViewPtr;
+
+        [_unityManager registerWebView:webView];
+    }
+
     void _PlaywireSetBannerTargeting(const char *cAdUnitId, const char *cCustomTargets)
     {
         NSString *adUnitId = NSSTRING(cAdUnitId);
@@ -371,6 +387,16 @@ extern "C" {
         return [_unityManager getTestAds];
     }
 
+    void _PlaywireSetMuted(bool isMuted)
+    {
+        [_unityManager setMuted:isMuted];
+    }
+
+    bool _PlaywireGetMuted()
+    {
+        return [_unityManager getMuted];
+    }
+
     void _PlaywireSetCMP(const char *cType)
     {
         NSString *typeString = NSSTRING(cType);
@@ -417,6 +443,24 @@ extern "C" {
         PWCMPType type = [_unityManager getCMP];
         NSString *typeString = [PWUnityPluginHelper cmpStringFrom:type]; 
         return cStringCopy([typeString UTF8String]);
+    }
+
+    #pragma mark - Privacy Options
+
+    bool _PlaywireGetPrivacyOptionsRequired()
+    {
+        return [_unityManager getPrivacyOptionsRequired];
+    }
+
+    void _PlaywireShowPrivacyOptionsForm()
+    {
+        [_unityManager showPrivacyOptionsFormWithCompletion:^(BOOL success) {
+            NSDictionary<NSString *, NSString *> *parameters = @{ @"success" : success ? @"true" : @"false" };
+            NSString *message = [PWUnityMessageBuilder buildWithName:PW_SDK_PrivacyOptionsForm_Event
+                                                            adUnitId:@""
+                                                          parameters:parameters];
+            [PWUnityManager sendUnityMessage:message];
+        }];
     }
 
 #ifdef __cplusplus

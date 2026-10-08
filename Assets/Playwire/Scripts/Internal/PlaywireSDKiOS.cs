@@ -34,6 +34,15 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         }
     }
 
+    public static bool Muted { 
+        get {
+            return _PlaywireGetMuted();
+        }
+        set {
+            _PlaywireSetMuted(value);
+        }
+    }
+
     public static new PlaywireSDKBase.CMP CMP { 
         get {
             try {
@@ -54,6 +63,26 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         _PlaywireSetLogLevel((int)level);
     }
 
+    /// <summary>
+    /// Checks if the user is in a region requiring a Privacy Options entry point (e.g., EEA/UK).
+    /// </summary>
+    public static bool IsPrivacyOptionsRequired {
+        get {
+            return _PlaywireGetPrivacyOptionsRequired();
+        }
+    }
+
+    /// <summary>
+    /// Displays the Privacy Options form so the user can modify or revoke consent choices.
+    /// <para>
+    /// See <see cref="PlaywireSDKCallback.OnPrivacyOptionsFormEvent"/> for the resulting triggered event.
+    /// </para>
+    /// </summary>
+    public static void ShowPrivacyOptionsForm()
+    {
+        _PlaywireShowPrivacyOptionsForm();
+    }
+
     #endregion Initialization
 
     #region Targeting
@@ -65,6 +94,21 @@ public class PlaywireSDKiOS : PlaywireSDKBase
     }
 
     #endregion Targeting
+
+    #region WebView
+
+    public static void RegisterWebView(IntPtr webView)
+    {
+        if (webView == IntPtr.Zero)
+        {
+            Debug.LogError("[PlaywireSDK] RegisterWebView: WebView cannot be null.");
+            return;
+        }
+
+        _PlaywireRegisterWebView(webView);
+    }
+
+    #endregion WebView
 
     #region Banners
 
@@ -206,7 +250,7 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         private static void _PlaywireHideBanner(string adUnitId) {}
 
-        private static void _PlaywireRefreshBanner(string adUnitId) {}        
+        private static void _PlaywireRefreshBanner(string adUnitId) {}
 
         private static void _PlaywireSetInterstitialTargeting(string adUnitId, string targeting) {}
 
@@ -251,6 +295,12 @@ public class PlaywireSDKiOS : PlaywireSDKBase
             return false;
         }
 
+        private static void _PlaywireSetMuted(bool isMuted) {}
+
+        private static bool _PlaywireGetMuted() {
+            return false;
+        }
+
         private static void _PlaywireSetCMP(string type) {}
 
         private static void _PlaywireSetLogLevel(int level) {}
@@ -258,6 +308,12 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         private static string _PlaywireGetCMP() {
             return "GoogleUMP";
         }
+
+        private static bool _PlaywireGetPrivacyOptionsRequired() {
+            return false;
+        }
+
+        private static void _PlaywireShowPrivacyOptionsForm() {}
     #else
         [DllImport("__Internal")]
         private static extern void _PlaywireInitializeSDK(string publisherId, string appId);
@@ -267,6 +323,9 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         [DllImport("__Internal")]
         private static extern void _PlaywireSetGlobalTargeting(string targeting);
+
+        [DllImport("__Internal")]
+        private static extern void _PlaywireRegisterWebView(IntPtr webView);
 
         [DllImport("__Internal")]
         private static extern void _PlaywireSetBannerTargeting(string adUnitId, string targeting);
@@ -335,6 +394,12 @@ public class PlaywireSDKiOS : PlaywireSDKBase
         private static extern bool _PlaywireGetTestAds();
 
         [DllImport("__Internal")]
+        private static extern void _PlaywireSetMuted(bool isMuted);
+
+        [DllImport("__Internal")]
+        private static extern bool _PlaywireGetMuted();
+
+        [DllImport("__Internal")]
         private static extern void _PlaywireSetCMP(string type);
 
         [DllImport("__Internal")]
@@ -342,6 +407,12 @@ public class PlaywireSDKiOS : PlaywireSDKBase
 
         [DllImport("__Internal")]
         private static extern string _PlaywireGetCMP();
+
+        [DllImport("__Internal")]
+        private static extern bool _PlaywireGetPrivacyOptionsRequired();
+
+        [DllImport("__Internal")]
+        private static extern void _PlaywireShowPrivacyOptionsForm();
     #endif
     #endregion DllImports
 }
