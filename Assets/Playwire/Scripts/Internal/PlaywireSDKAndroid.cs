@@ -56,6 +56,15 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
         }
     }
 
+    public static bool Muted { 
+        get {
+            return PluginClass.CallStatic<bool>("getMuted");
+        }
+        set {
+            PluginClass.CallStatic("setMuted", value);
+        }
+    }
+
     public static new PlaywireSDKBase.CMP CMP {
 
         get {
@@ -77,6 +86,26 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
         PluginClass.CallStatic("setLogLevel", (int)level);
     }
 
+    /// <summary>
+    /// Checks if the user is in a region requiring a Privacy Options entry point (e.g., EEA/UK).
+    /// </summary>
+    public static bool IsPrivacyOptionsRequired {
+        get {
+            return PluginClass.CallStatic<bool>("getPrivacyOptionsRequired");
+        }
+    }
+
+    /// <summary>
+    /// Displays the Privacy Options form so the user can modify or revoke consent choices.
+    /// <para>
+    /// See <see cref="PlaywireSDKCallback.OnPrivacyOptionsFormEvent"/> for the resulting triggered event.
+    /// </para>
+    /// </summary>
+    public static void ShowPrivacyOptionsForm()
+    {
+        PluginClass.CallStatic("showPrivacyOptionsForm");
+    }
+
     #endregion Initialization
 
     #region Targeting
@@ -88,6 +117,26 @@ public class PlaywireSDKAndroid : PlaywireSDKBase
     }
 
     #endregion Targeting
+
+    #region WebView
+
+    /// <summary>
+    /// Registers an Android WebView with the Playwire SDK for
+    /// Google Mobile Ads WebView API support.
+    /// </summary>
+    /// <param name="webView">The native Android WebView instance.</param>
+    public static void RegisterWebView(AndroidJavaObject webView)
+    {
+        if (webView == null)
+        {
+            Debug.LogError($"[{LogTag}] RegisterWebView: WebView cannot be null.");
+            return;
+        }
+
+        PluginClass.CallStatic("registerWebView", webView);
+    }
+
+    #endregion WebView
 
     #region Banners
 

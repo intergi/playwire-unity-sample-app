@@ -9,6 +9,7 @@
 #import "PWAdPosition.h"
 #import "PWUnityMessageBuilder.h"
 #import "PWConstant.h"
+#import <WebKit/WebKit.h>
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,7 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (instancetype)init NS_UNAVAILABLE;
 
 - (void)setGlobalTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
-
+- (void)registerWebView:(WKWebView *)webView;
 - (void)loadBanner:(NSString *)adUnitId
           position:(PWAdPosition)position
      withTargeting:(NSDictionary<NSString *,NSString *> * _Nullable)targeting;
@@ -52,10 +53,16 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)setTestAds:(BOOL)isEnabled;
 - (BOOL)getTestAds;
 
+- (void)setMuted:(BOOL)isMuted;
+- (BOOL)getMuted;
+
 - (void)setCMP:(PWCMPType)type;
 - (PWCMPType)getCMP;
 
 - (void)setLogLevel:(LogLevel)level;
+
+- (BOOL)getPrivacyOptionsRequired;
+- (void)showPrivacyOptionsFormWithCompletion:(void (^)(BOOL success))completion;
 
 + (UIViewController*)unityViewController;
 + (void)sendUnityMessage:(NSString *)message;

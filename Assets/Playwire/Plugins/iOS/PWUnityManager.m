@@ -45,7 +45,34 @@
 
 + (UIViewController*)unityViewController
 {
-    return [[[UIApplication sharedApplication] keyWindow] rootViewController];
+    UIWindow *keyWindow = nil;
+    
+    for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+        if ([scene isKindOfClass:[UIWindowScene class]]) {
+            UIWindowScene *windowScene = (UIWindowScene *)scene;
+            
+            for (UIWindow *w in windowScene.windows) {
+                if (w.isKeyWindow) {
+                    keyWindow = w;
+                    if (scene.activationState == UISceneActivationStateForegroundActive) {
+                        break;
+                    }
+                }
+            }
+        }
+        if (keyWindow && scene.activationState == UISceneActivationStateForegroundActive) break;
+    }
+    
+    if (!keyWindow) {
+        keyWindow = UIApplication.sharedApplication.windows.firstObject;
+    }
+
+    UIViewController *topController = keyWindow.rootViewController;
+    while (topController.presentedViewController) {
+        topController = topController.presentedViewController;
+    }
+    
+    return topController;
 }
 
 - (PWBannerAdUnitManager *)bannerAdUnitManager:(NSString *)adUnitId
@@ -92,6 +119,22 @@
 {
   [PlaywireSDK.shared.targeting clear];
   [PlaywireSDK.shared.targeting add:targeting];
+}
+
+- (void)registerWebView:(WKWebView *)webView
+{
+    if (!webView) {
+        return;
+    }
+
+    if ([NSThread isMainThread]) {
+        [PlaywireSDK.shared registerWebView:webView];
+        return;
+    }
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+        [PlaywireSDK.shared registerWebView:webView];
+    });
 }
 
 - (void)setBanner:(NSString *)adUnitId
@@ -242,6 +285,18 @@
   return PlaywireSDK.shared.test;
 }
 
+#pragma mark - Mute
+
+- (void)setMuted:(BOOL)isMuted
+{
+  PlaywireSDK.shared.isMuted = isMuted;
+}
+
+- (BOOL)getMuted
+{
+  return PlaywireSDK.shared.isMuted;
+}
+
 #pragma mark - CMP
 
 - (void)setCMP:(PWCMPType)type
@@ -259,5 +314,31 @@
 - (void)setLogLevel:(LogLevel)level
 {
   PlaywireSDK.shared.logLevel = level;
+}
+
+#pragma mark - Privacy Options
+
+- (BOOL)getPrivacyOptionsRequired
+{
+  return PlaywireSDK.shared.isPrivacyOptionsRequired;
+}
+
+- (void)showPrivacyOptionsFormWithCompletion:(void (^)(BOOL success))completion
+{
+  void (^presentForm)(void) = ^{
+    UIViewController *vc = [PWUnityManager unityViewController];
+    [PlaywireSDK.shared showPrivacyOptionsFormFrom:vc completion:^(BOOL success) {
+      if (completion) {
+        completion(success);
+      }
+    }];
+  };
+
+  if ([NSThread isMainThread]) {
+    presentForm();
+    return;
+  }
+
+  dispatch_async(dispatch_get_main_queue(), presentForm);
 }
 @end
